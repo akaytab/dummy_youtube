@@ -12,7 +12,7 @@ const asyncHandlerTC =(fn)=>async(req,res,next)=>{
 
 //using promise
 const asyncHandlerPromise =(requestHandler)=>{
-    (req,res,next)=>{
+   return (req,res,next)=>{
         Promise.resolve(requestHandler(req,res,next)).catch((err)=>next(err))
     }
 }
