@@ -30,9 +30,8 @@ const userSchema = new mongoose.Schema(
             type:String,
             required:true,
         },
-        coverInage:{
+        coverImage:{
             type:String,
-            required:true,
         },
         watchHistore:[
             {

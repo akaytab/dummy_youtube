@@ -24,10 +24,10 @@ const registerUser= asyncHandlerPromise(async (req,res) => {
             field?.trim() === ""
         )
     ){
-        throw new ApiError(400,"All fields are required");
+        throw new ApiError(400,`some fields are missing  please check and fill the missing fields`);
     }
 
-    const existedUser = User.findOne(
+    const existedUser = await User.findOne(
         {
             $or:[{username},{email}]
         }
@@ -37,14 +37,18 @@ const registerUser= asyncHandlerPromise(async (req,res) => {
     }
 
    const avatarLocalPath= req.files?.avatar[0]?.path;
-   const coverimgPath =req.files?.avatar[0]?.path;
+
+   let coverImgPath;
+   if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+    coverImgPath =req.files?.coverImage[0]?.path;
+   }
 
    if(!avatarLocalPath){
     throw new ApiError(400,'avatar image is required');
    }
 
   const avatar= await uploadOnCloudinary(avatarLocalPath);
-  const coverImage= await uploadOnCloudinary(coverimgPath);
+  const coverImage= await uploadOnCloudinary(coverImgPath);
 
   if(!avatar){
     throw new ApiError(400,'avatar image is required');
