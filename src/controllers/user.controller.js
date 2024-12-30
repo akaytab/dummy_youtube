@@ -37,7 +37,6 @@ const registerUser= asyncHandlerPromise(async (req,res) => {
      */
 
     const {email,username,fullName,password}=req.body;
-    console.log(req.body);
 
     if(
         [email,username,fullName,password].some((field)=>
@@ -150,12 +149,13 @@ return res
 
 })
 
-
 const logOutUser = asyncHandlerPromise(async (req,res) => {
     
     User.findByIdAndUpdate(req.user._id,
         {
-            $set:{refreshToken:undefined}
+            $unset:{
+                refreshToken:1,
+            }
         },
         {
             new: true,
@@ -380,10 +380,11 @@ const userChannel = asyncHandlerPromise(async(req,res) => {
                 avatar:1,
                 coverImage:1,
                 email:1,
+                isSubscribed:1
             }
         }
     ])
-    console.log(channel);
+    // console.log(channel);
     
     if (!channel?.length) {
         throw new ApiError(404, "channel does not exists")
